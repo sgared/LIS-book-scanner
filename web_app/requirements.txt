@@ -1,0 +1,12 @@
+flask==3.0.3
+opencv-python==4.10.0.84
+pytesseract==0.3.13
+easyocr==1.7.2
+spacy==3.7.5
+nltk==3.8.1
+pandas==2.2.2
+wordcloud==1.9.3
+pymarc==5.3.1
+requests==2.32.3
+pillow==10.4.0
+gunicorn==22.0.0

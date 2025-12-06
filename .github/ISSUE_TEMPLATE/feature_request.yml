@@ -1,0 +1,129 @@
+name: "✨ Feature Request"
+description: "Suggest an idea for this project"
+title: "[FEATURE]: "
+labels: ["enhancement", "needs-review"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ✨ Feature Request
+        
+        Thanks for suggesting a new feature! Please fill out the form below to help us understand your idea.
+        
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: "📝 Feature Description"
+      description: "A clear and concise description of what you want to happen"
+      placeholder: "Describe your feature request here..."
+    validations:
+      required: true
+      
+  - type: textarea
+    id: problem-solution
+    attributes:
+      label: "🎯 Problem & Solution"
+      description: "What problem does this feature solve? How would it help users?"
+      placeholder: |
+        **Problem**: What problem are you trying to solve?
+        **Solution**: How would this feature solve that problem?
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: feature-category
+    attributes:
+      label: "🏷️ Feature Category"
+      description: "What category does this feature belong to?"
+      options:
+        - OCR/Text Recognition
+        - User Interface
+        - Mobile Experience
+        - Database/Storage
+        - Analytics/Visualization
+        - API Integration
+        - Performance
+        - Security
+        - Documentation
+        - Other
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "⚡ Priority"
+      description: "How important is this feature to you?"
+      options:
+        - Low (Nice to have)
+        - Medium (Would be helpful)
+        - High (Important for my use case)
+        - Critical (Blocking my usage)
+    validations:
+      required: true
+      
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: "🔍 Use Cases"
+      description: "Describe specific scenarios where this feature would be useful"
+      placeholder: |
+        1. As a librarian, I want to...
+        2. When processing books, I need to...
+        3. For mobile users, it would help to...
+    validations:
+      required: true
+      
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "🔄 Alternatives Considered"
+      description: "Describe any alternative solutions or features you've considered"
+      placeholder: "Have you tried any workarounds? Are there similar features in other tools?"
+    validations:
+      required: false
+      
+  - type: textarea
+    id: implementation-ideas
+    attributes:
+      label: "💡 Implementation Ideas"
+      description: "If you have ideas about how this could be implemented, share them here"
+      placeholder: "Any technical suggestions or ideas for implementation?"
+    validations:
+      required: false
+      
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: "ℹ️ Additional Context"
+      description: "Add any other context, screenshots, or examples about the feature request"
+      placeholder: "You can drag and drop images, mockups, or examples here"
+    validations:
+      required: false
+      
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: "🤝 Contribution"
+      description: "Are you willing to help implement this feature?"
+      options:
+        - label: "I would be willing to submit a pull request for this feature"
+          required: false
+        - label: "I can help with testing this feature"
+          required: false
+        - label: "I can help with documentation for this feature"
+          required: false
+          
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: "✅ Pre-submission Checklist"
+      description: "Please confirm the following"
+      options:
+        - label: "I have searched for existing feature requests before creating this one"
+          required: true
+        - label: "I have provided a clear description of the feature and its benefits"
+          required: true
+        - label: "I understand this is a free and open-source project maintained by volunteers"
+          required: true

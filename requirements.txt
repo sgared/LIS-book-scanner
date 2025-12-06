@@ -1,0 +1,16 @@
+opencv-python==4.10.0.84
+pytesseract==0.3.13
+easyocr==1.7.1
+spacy==3.7.5
+nltk==3.8.1
+pandas==2.2.2
+matplotlib==3.9.0
+seaborn==0.13.2
+scikit-learn==1.5.1
+requests==2.32.3
+Pillow==10.4.0
+wordcloud==1.9.3
+pymarc==5.1.0
+tqdm==4.66.5
+pyzbar==0.1.9
+ipython==8.27.0
