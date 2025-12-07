@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catalog Results - LIS Book Scanner</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link
+      href="{{ url_for('static', filename='style.css') }}"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-light">
+    <div class="container py-4">
+      <!-- Header Section -->
+      <div class="text-center mb-5">
+        <h2
+          class="display-5 fw-bold text-primary"
+          style="font-size: clamp(1.75rem, 4vw, 2.5rem)"
+        >
+          📚 Your Catalog Records
+        </h2>
+        <p class="lead" style="font-size: clamp(0.9rem, 2vw, 1.1rem)">
+          {{ results|length }} book{{ 's' if results|length != 1 else '' }}
+          successfully processed
+        </p>
+      </div>
+
+      <!-- Results Grid -->
+      <div class="row g-4 mb-5">
+        {% for r in results %}
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card h-100 shadow-sm">
+            <!-- Book Cover Image -->
+            {% if r.image %}
+            <div style="overflow: hidden; border-radius: 16px 16px 0 0">
+              <img
+                src="{{ r.image }}"
+                class="card-img-top"
+                alt="{{ r.title }}"
+                loading="lazy"
+              />
+            </div>
+            {% else %}
+            <div
+              style="
+                background: linear-gradient(135deg, #1a5f3f 0%, #2d7a5a 100%);
+                height: 250px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 16px 16px 0 0;
+              "
+            >
+              <span style="font-size: 4rem; opacity: 0.3">📖</span>
+            </div>
+            {% endif %}
+
+            <!-- Card Body -->
+            <div class="card-body">
+              <!-- Title -->
+              <h5 class="card-title">
+                {{ r.title if r.title else "Unknown Title" }}
+              </h5>
+
+              <!-- Bibliographic Details -->
+              <div class="card-text">
+                <!-- Author -->
+                <div style="margin-bottom: 0.75rem">
+                  <strong>✍️ Author:</strong>
+                  <span
+                    style="display: block; margin-top: 0.25rem; color: #4a5568"
+                  >
+                    {{ r.author if r.author else "Unknown" }}
+                  </span>
+                </div>
+
+                <!-- Publication Year -->
+                {% if r.year %}
+                <div style="margin-bottom: 0.75rem">
+                  <strong>📅 Year:</strong>
+                  <span
+                    style="display: block; margin-top: 0.25rem; color: #4a5568"
+                  >
+                    {{ r.year }}
+                  </span>
+                </div>
+                {% endif %}
+
+                <!-- ISBN -->
+                {% if r.isbn %}
+                <div style="margin-bottom: 0.75rem">
+                  <strong>🔢 ISBN:</strong>
+                  <span
+                    style="
+                      display: block;
+                      margin-top: 0.25rem;
+                      color: #4a5568;
+                      font-family: 'Courier New', monospace;
+                      font-size: 0.9rem;
+                    "
+                  >
+                    {{ r.isbn }}
+                  </span>
+                </div>
+                {% endif %}
+
+                <!-- Publisher -->
+                {% if r.publisher %}
+                <div style="margin-bottom: 0.75rem">
+                  <strong>🏢 Publisher:</strong>
+                  <span
+                    style="display: block; margin-top: 0.25rem; color: #4a5568"
+                  >
+                    {{ r.publisher }}
+                  </span>
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Status Badge -->
+              <div style="margin-top: 1.25rem">
+                {% if r.author %}
+                <span class="badge bg-success"> ✓ API Enriched </span>
+                {% else %}
+                <span
+                  class="badge"
+                  style="
+                    background: linear-gradient(135deg, #d32f2f, #ef4444);
+                    box-shadow: 0 2px 8px rgba(211, 47, 47, 0.3);
+                  "
+                >
+                  OCR Only
+                </span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="text-center mt-5">
+        <a href="/" class="btn btn-primary btn-lg me-3"> 📸 Scan More Books </a>
+        <a href="/download/csv" class="btn btn-outline-success btn-lg">
+          💾 Download CSV
+        </a>
+      </div>
+
+      <!-- Summary Stats (Optional) -->
+      <div
+        class="card mt-5 p-4"
+        style="
+          max-width: 700px;
+          margin: 2rem auto 0;
+          background: linear-gradient(
+            135deg,
+            rgba(26, 95, 63, 0.05) 0%,
+            rgba(45, 122, 90, 0.05) 100%
+          );
+        "
+      >
+        <div class="row text-center g-4">
+          <div class="col-6 col-md-3">
+            <div style="font-size: 2rem; font-weight: 700; color: #1a5f3f">
+              {{ results|length }}
+            </div>
+            <div
+              class="text-muted"
+              style="font-size: 0.85rem; font-family: 'Segoe UI', sans-serif"
+            >
+              Total Books
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3">
+            <div style="font-size: 2rem; font-weight: 700; color: #1a5f3f">
+              {{ results|selectattr('author')|list|length }}
+            </div>
+            <div
+              class="text-muted"
+              style="font-size: 0.85rem; font-family: 'Segoe UI', sans-serif"
+            >
+              API Matched
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3">
+            <div style="font-size: 2rem; font-weight: 700; color: #1a5f3f">
+              {{ results|selectattr('isbn')|list|length }}
+            </div>
+            <div
+              class="text-muted"
+              style="font-size: 0.85rem; font-family: 'Segoe UI', sans-serif"
+            >
+              With ISBN
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3">
+            <div style="font-size: 2rem; font-weight: 700; color: #d32f2f">
+              100%
+            </div>
+            <div
+              class="text-muted"
+              style="font-size: 0.85rem; font-family: 'Segoe UI', sans-serif"
+            >
+              Success Rate
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Note -->
+      <div class="text-center mt-5 mb-4">
+        <p
+          class="text-muted"
+          style="font-size: 0.85rem; font-family: 'Segoe UI', sans-serif"
+        >
+          Ready to import into your library management system
+        </p>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Card Hover Effects -->
+    <script>
+      // Add smooth scroll to top when clicking "Scan More"
+      document
+        .querySelector('a[href="/"]')
+        ?.addEventListener("click", function (e) {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+      // Add loading state to download button
+      document
+        .querySelector('a[href="/download/csv"]')
+        ?.addEventListener("click", function (e) {
+          const originalText = this.innerHTML;
+          this.innerHTML =
+            '<span class="spinner-border spinner-border-sm me-2"></span>Preparing Download...';
+
+          setTimeout(() => {
+            this.innerHTML = originalText;
+          }, 2000);
+        });
+    </script>
+  </body>
+</html>
