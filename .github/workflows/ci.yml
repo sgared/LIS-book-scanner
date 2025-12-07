@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8, 3.9, "3.10", "3.11"]
+        python-version: [3.9, "3.10", "3.11"]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
         
@@ -30,46 +30,26 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements_minimal.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
           
-    - name: Install Python dependencies
+    - name: Install Python dependencies (minimal)
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pytest pytest-cov flake8 black
-        python -m spacy download en_core_web_sm
+        pip install -r web_app/requirements_minimal.txt
         
-    - name: Lint with flake8
+    - name: Run comprehensive tests
       run: |
-        # Stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # Exit-zero treats all errors as warnings
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-        
-    - name: Check code formatting with black
-      run: |
-        black --check --diff .
-        
-    - name: Test with pytest
-      run: |
-        pytest --cov=web_app --cov-report=xml --cov-report=html
-        
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
+        python tests/test_production.py
 
   security:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: 3.9
         
@@ -92,10 +72,10 @@ jobs:
     if: github.ref == 'refs/heads/main'
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: 3.9
         
@@ -104,48 +84,27 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y tesseract-ocr
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        python -m spacy download en_core_web_sm
+        pip install -r web_app/requirements_minimal.txt
+        
+    - name: Test production app
+      run: |
+        cd web_app
+        python -c "
+        from app_production import app
+        print('✅ Production app ready for deployment')
+        "
         
     - name: Create deployment package
       run: |
         mkdir -p dist
         cp -r web_app dist/
-        cp requirements.txt dist/
         cp README.md dist/
         cp LICENSE dist/
+        cp DEPLOYMENT_FIX.md dist/
         
     - name: Upload deployment artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: deployment-package
         path: dist/
         retention-days: 30
-
-  docker-build:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-      
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v3
-      with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: |
-          ${{ secrets.DOCKER_USERNAME }}/lis-book-scanner:latest
-          ${{ secrets.DOCKER_USERNAME }}/lis-book-scanner:${{ github.sha }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max

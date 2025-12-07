@@ -4,23 +4,15 @@ FROM python:3.9-slim
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     tesseract-ocr-eng \
-    libglib2.0-0 \
-    libsm6 \
-    libxext6 \
-    libxrender-dev \
-    libgomp1 \
-    libgl1-mesa-glx \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Copy requirements and install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Download spaCy model
-RUN python -m spacy download en_core_web_sm
+# Copy minimal requirements and install Python dependencies
+COPY web_app/requirements_minimal.txt .
+RUN pip install --no-cache-dir -r requirements_minimal.txt
 
 # Copy application code
 COPY . .
@@ -29,7 +21,7 @@ COPY . .
 RUN mkdir -p web_app/uploads web_app/static/temp_uploads
 
 # Set environment variables
-ENV FLASK_APP=web_app/app.py
+ENV FLASK_APP=web_app/app_production.py
 ENV FLASK_ENV=production
 ENV PYTHONPATH=/app
 
@@ -43,7 +35,7 @@ USER app
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:5000/ || exit 1
+    CMD curl -f http://localhost:5000/health || exit 1
 
-# Start application
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "120", "web_app.app:app"]
+# Start application using production version
+CMD ["python", "web_app/app_production.py"]
