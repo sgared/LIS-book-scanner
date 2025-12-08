@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lis-book-scanner"
+version = "1.0.0"
+description = "OCR-based book cataloging system for libraries"
+authors = [{name = "LIS OCR Project", email = "lis@example.com"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+
+dependencies = [
+    "flask>=2.0.0",
+    "werkzeug>=2.0.0",
+    "pillow>=8.0.0",
+    "pandas>=1.3.0",
+    "pytesseract>=0.3.8",
+    "matplotlib>=3.4.0",
+    "numpy>=1.20.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "black>=21.0",
+    "flake8>=3.8",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/sgared/LIS-book-scanner"
+"Bug Reports" = "https://github.com/sgared/LIS-book-scanner/issues"
+"Source" = "https://github.com/sgared/LIS-book-scanner"
+
+[tool.setuptools.packages.find]
+where = ["server-side"]
+include = ["*"]
+
+[tool.setuptools.package-data]
+"*" = ["templates/*", "static/*", "*.db"]
