@@ -1,0 +1,19 @@
+# Core Flask requirements for Replit
+Flask==2.3.3
+Werkzeug==2.3.7
+
+# Basic image processing
+Pillow==10.1.0
+
+# Data handling
+pandas==2.1.4
+
+# OCR (optional - will fallback if not available)
+pytesseract==0.3.10
+
+# Plotting (optional)
+matplotlib==3.8.2
+numpy==1.25.2
+
+# File handling
+secure-filename==0.1.1

@@ -144,14 +144,14 @@
                       required
                     />
                     
-                    <!-- Mobile Camera Input -->
+                    <!-- Mobile Camera Input (same name for compatibility) -->
                     <input
                       type="file"
+                      name="files"
                       accept="image/*"
                       capture="environment"
                       class="d-none"
                       id="cameraInput"
-                      multiple
                     />
                     
                     <div id="uploadPrompt">
@@ -324,14 +324,18 @@
     <script>
       // Enhanced form submit with better UX
       document.querySelector('#uploadForm').addEventListener('submit', function (e) {
+        console.log('🚀 Form submission started');
         const btn = document.getElementById('submitBtn');
         const btnText = document.getElementById('btnText');
         const btnLoading = document.getElementById('btnLoading');
         const fileInput = document.getElementById('fileInput');
         const progressContainer = document.getElementById('progressContainer');
 
+        console.log('📁 Files selected:', fileInput.files.length);
+        
         if (fileInput.files.length === 0) {
           e.preventDefault();
+          console.log('❌ No files selected');
           showAlert('Please select at least one image to upload.', 'warning');
           return;
         }
@@ -339,17 +343,22 @@
         // Check file types and sizes
         const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
         for (let file of fileInput.files) {
+          console.log(`📄 Checking file: ${file.name}, type: ${file.type}, size: ${file.size}`);
           if (!validTypes.includes(file.type)) {
             e.preventDefault();
+            console.log(`❌ Invalid file type: ${file.type}`);
             showAlert(`Invalid file type: ${file.name}. Please upload only image files.`, 'danger');
             return;
           }
           if (file.size > 10 * 1024 * 1024) { // 10MB limit
             e.preventDefault();
+            console.log(`❌ File too large: ${file.size} bytes`);
             showAlert(`File too large: ${file.name}. Please use files under 10MB.`, 'danger');
             return;
           }
         }
+
+        console.log('✅ All files validated, proceeding with form submission');
 
         // Show loading state
         btnText.style.display = 'none';

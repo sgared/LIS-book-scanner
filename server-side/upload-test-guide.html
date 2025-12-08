@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Test - Server-Side</title>
+</head>
+<body>
+    <h1>🧪 Server-Side Upload Test</h1>
+    
+    <h2>✅ Fixed Issues:</h2>
+    <ul>
+        <li>✅ Added debug logging to Flask upload route</li>
+        <li>✅ Fixed duplicate file input names in HTML form</li>
+        <li>✅ Enhanced JavaScript validation with console logging</li>
+        <li>✅ Improved error handling and user feedback</li>
+    </ul>
+    
+    <h2>🔧 How to Test:</h2>
+    <ol>
+        <li><strong>Open browser to:</strong> <code>http://localhost:5000</code></li>
+        <li><strong>Open developer console</strong> (F12) to see debug logs</li>
+        <li><strong>Select one or more image files</strong></li>
+        <li><strong>Click "Process Books"</strong> - you should see:</li>
+        <ul>
+            <li>Console logs: "🚀 Form submission started"</li>
+            <li>File validation messages</li>
+            <li>Server processing logs in terminal</li>
+        </ul>
+        <li><strong>If successful:</strong> You'll see the results page</li>
+        <li><strong>If errors:</strong> Check browser console and server terminal</li>
+    </ol>
+    
+    <h2>🐛 Common Issues & Solutions:</h2>
+    
+    <h3>❌ "Page not working" Error:</h3>
+    <p><strong>Solution:</strong> Check if server is running on http://localhost:5000</p>
+    
+    <h3>❌ Form doesn't submit:</h3>
+    <p><strong>Solution:</strong> Check browser console for JavaScript errors</p>
+    
+    <h3>❌ "No files selected" error:</h3>
+    <p><strong>Solution:</strong> Make sure to select image files (JPG, PNG, GIF)</p>
+    
+    <h3>❌ Upload fails silently:</h3>
+    <p><strong>Solution:</strong> Check server terminal for Python errors</p>
+    
+    <h2>📋 Debug Checklist:</h2>
+    <input type="checkbox"> Server running at http://localhost:5000<br>
+    <input type="checkbox"> Browser console open (F12)<br>
+    <input type="checkbox"> Image files selected (under 10MB)<br>
+    <input type="checkbox"> No JavaScript errors in console<br>
+    <input type="checkbox"> Server shows debug logs in terminal<br>
+    
+    <hr>
+    <p><strong>🚀 Server should now work correctly!</strong></p>
+    <p>The upload form will process images and show results on the results page.</p>
+</body>
+</html>

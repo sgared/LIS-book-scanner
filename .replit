@@ -1,14 +1,23 @@
 language = "python3"
-run = "cd server-side && python app_production.py"
+run = "python main.py"
 
 [nix]
 channel = "stable-22_11"
 
 [deployment]
-run = ["sh", "-c", "cd server-side && python app_production.py"]
+run = ["sh", "-c", "bash setup_replit.sh"]
+
+[env]
+VIRTUAL_ENV = "/home/runner/${REPL_SLUG}/venv"
+PATH = "${VIRTUAL_ENV}/bin"
+PYTHONPATH = "$PYTHONHOME/lib/python3.10:${VIRTUAL_ENV}/lib/python3.10/site-packages"
+MPLBACKEND = "Agg"
+FLASK_APP = "server-side/app_production.py"
+FLASK_ENV = "development"
 
 [packager]
-ignoredPaths = ["venv", ".config", "Poetry"]
+language = "python3"
+ignoredPaths = ["venv", ".config", "Poetry", "__pycache__"]
 
 [packager.features]
 enabledForHosting = false
@@ -27,16 +36,4 @@ start = "pylsp"
 language = "python3"
 
 [gitHubImport]
-requiredFiles = [".replit", "replit.nix", "server-side/app_production.py"]
-
-[debugger]
-support = true
-
-[debugger.interactive]
-transport = "localhost:5000"
-startCommand = ["dap-python", "server-side/app_production.py"]
-
-[debugger.interactive.integratedAdapter]
-dapTcpAddress = "localhost:0"
-dapTcpPort = 5678
-transport = "tcp"
+requiredFiles = [".replit", "replit.nix", "setup_replit.sh"]

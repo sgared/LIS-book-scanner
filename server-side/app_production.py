@@ -156,19 +156,27 @@ def index():
 @app.route('/', methods=['POST'])
 def upload_files():
     """Handle file upload and OCR processing"""
+    print("📤 Upload request received")
+    print(f"Files in request: {list(request.files.keys())}")
+    
     if 'files' not in request.files:
+        print("❌ No 'files' key in request.files")
         flash('No files selected', 'error')
         return redirect(url_for('index'))
     
     files = request.files.getlist('files')
+    print(f"📁 Number of files received: {len(files)}")
+    
     if not files or all(file.filename == '' for file in files):
+        print("❌ No valid files found")
         flash('No files selected', 'error')
         return redirect(url_for('index'))
     
     results = []
     
-    for file in files:
+    for i, file in enumerate(files):
         if file and file.filename:
+            print(f"📷 Processing file {i+1}: {file.filename}")
             try:
                 # Secure filename
                 filename = secure_filename(file.filename)
